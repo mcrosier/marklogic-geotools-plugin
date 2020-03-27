@@ -64,7 +64,7 @@ public class MarkLogicBasicFeatureSource extends ContentFeatureSource {
     
 	public MarkLogicBasicFeatureSource(ContentEntry entry, Query query) {
 		super(entry, query);
-		System.out.println("In MarkLogicBasicFeatureSource()");
+		LOGGER.fine("In MarkLogicBasicFeatureSource()");
 		
 		attributeBuilder = new AttributeTypeBuilder(new FeatureTypeFactoryImpl());
 		retrieveDBMetadata(entry, query);
@@ -118,7 +118,9 @@ public class MarkLogicBasicFeatureSource extends ContentFeatureSource {
 			dbMetadata=geoQueryServices.getLayerSchema(entry.getName().getLocalPart());
 			serviceName = dbMetadata.get("serviceName").asText();
 			layerId = dbMetadata.get("metadata").get("id").asInt();
-			System.out.println("serviceName: " + serviceName + " layerId: " + layerId);
+			if (LOGGER.isLoggable(Level.INFO)){
+				LOGGER.info("serviceName: " + serviceName + " layerId: " + layerId);
+			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -194,7 +196,9 @@ public class MarkLogicBasicFeatureSource extends ContentFeatureSource {
 		}
 		
 		SimpleFeatureTypeBuilder builder = new SimpleFeatureTypeBuilder();
-//		LOGGER.info("Setting feature type builder name to " + entry.getName());
+		if (LOGGER.isLoggable(Level.FINE)) {
+			LOGGER.fine("Setting feature type builder name to " + entry.getName());
+		}
 		builder.setName(entry.getName());
 		builder.setCRS( DefaultGeographicCRS.WGS84 );
 		builder.setNamespaceURI(getDataStore().getNamespaceURI());
